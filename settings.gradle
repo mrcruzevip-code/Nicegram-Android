@@ -12,12 +12,9 @@ include(":nicegram-features")
 includeBuild('nicegram-assistant-android') {
     dependencySubstitution {
         substitute module('nicegram:assistant-core') using project(':assistant-core')
-        substitute module('nicegram:features:account-export') using project(':features:account-export')
-        substitute module('nicegram:features:user-activities') using project(':features:user-activities')
-        substitute module('nicegram:features:ai-chat-analysis') using project(':features:ai-chat-analysis')
-        substitute module('nicegram:core:network') using project(':core:network')
+        substitute module('nicegram:core:data') using project(':core:data')
+        substitute module('nicegram:core:domain') using project(':core:domain')
         substitute module('nicegram:core:markets') using project(':core:markets')
-        substitute module('nicegram:features:rep-user') using project(':features:rep-user')
         substitute module('nicegram:features:nicegram-billing') using project(':features:nicegram-billing')
     }
 }

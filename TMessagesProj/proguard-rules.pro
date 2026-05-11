@@ -130,7 +130,7 @@
 }
 
 -keep class androidx.recyclerview.** { *; }
--keep class com.appvillis.core_network.data.** { *; }
+-keep class com.appvillis.core_data.data.** { *; }
 -keep class com.appvillis.feature_nuhub.data.NuTagsRepositoryImpl$NuTagJson { *; }
 -keep class com.appvillis.feature_nicegram_assistant.data.SpecialOffersRepositoryImpl$SpecialOfferJson { *; }
 -keep class com.appvillis.feature_nicegram_client.data.NgClientRemoteConfigRepoImpl$DialogsListBannerJson { *; }
@@ -242,9 +242,9 @@ public static final ** CREATOR;
 -keep class com.appvillis.feature_gods_eye.data.GodsEyeConfigRepositoryImpl$* { *; }
 -keep class com.appvillis.feature_ai_shortcuts.data.SettingsRepositoryImpl { *; }
 -keep class com.appvillis.feature_ai_shortcuts.data.SettingsRepositoryImpl$* { *; }
--keep class com.appvillis.core_network.NicegramEvmSwapApi$* { *; }
--keep class com.appvillis.core_network.NicegramTonSwapApi$* { *; }
--keep class com.appvillis.core_network.ApiService$* { *; }
+-keep class com.appvillis.core_data.NicegramEvmSwapApi$* { *; }
+-keep class com.appvillis.core_data.NicegramTonSwapApi$* { *; }
+-keep class com.appvillis.core_data.ApiService$* { *; }
 -keep class com.appvillis.nicegram_wallet.wallet_tonconnect.domain.TcController { *; }
 -keep class com.appvillis.nicegram_wallet.wallet_tonconnect.domain.TcController$* { *; }
 -keep class com.appvillis.nicegram_wallet.wallet_external_ton.domain.TcConnectionsManager$TcConnection { *; }

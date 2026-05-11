@@ -1,7 +1,7 @@
 package app.nicegram
 
-import com.appvillis.core_network.data.body.ChannelInfoRequest.MessageInformation
-import com.appvillis.core_network.data.serialized.MediaWrapper
+import com.appvillis.core_data.data.body.ChannelInfoRequest.MessageInformation
+import com.appvillis.core_data.data.serialized.MediaWrapper
 import org.telegram.messenger.MessageObject
 import org.telegram.tgnet.TLObject
 import org.telegram.tgnet.TLRPC

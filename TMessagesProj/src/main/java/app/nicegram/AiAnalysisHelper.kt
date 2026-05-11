@@ -33,7 +33,7 @@ object AiAnalysisHelper {
     fun onChatAnalysisClick(fromContextMenu: Boolean, activity: Activity, currentAccount: Int, isTopic: Boolean, threadMessageId: Long, currentChat: Chat?, currentUser: User?, messages: List<MessageObject>) {
         AnalyticsHelper.logEvent(activity, if (fromContextMenu) "chat_ai_open_from_menu" else "chat_ai_open_from_chat", null)
 
-        val currentId: Long = if ((currentChat != null)) currentChat.id else currentUser?.id ?: 0
+        val currentId: Long = currentChat?.id ?: (currentUser?.id ?: 0)
         GlobalScope.launch(Dispatchers.IO) {
             val bundle = getAndPrepareMessages(currentAccount, isTopic, threadMessageId, messages, currentChat, currentUser)
 
@@ -198,9 +198,10 @@ object AiAnalysisHelper {
         var displayName = ""
         var msgText = it.message ?: ""
         if (from is TLRPC.TL_peerUser) {
-            val msgSender =
-                MessagesStorage.getInstance(currentAccount).getUser(it.from_id.user_id)
-            displayName = getUserDisplayName(msgSender.first_name, msgSender.last_name)
+            val msgSender = MessagesStorage
+                .getInstance(currentAccount)
+                ?.getUser(it.from_id.user_id)
+            displayName = getUserDisplayName(msgSender?.first_name, msgSender?.last_name)
         } else if (chat != null) {
             displayName = chat.title
         }
@@ -229,8 +230,8 @@ object AiAnalysisHelper {
     class MessageData(val text: String, val displayName: String)
 
     private fun getUserDisplayName(firstName: String?, lastName: String?): String {
-        var userLastName = firstName ?: ""
-        var userFirstName = lastName ?: ""
+        var userLastName = firstName.orEmpty()
+        var userFirstName = lastName.orEmpty()
         if (userLastName == "null") userLastName = ""
         if (userFirstName == "null") userFirstName = ""
         return ("$userFirstName $userLastName").trim()

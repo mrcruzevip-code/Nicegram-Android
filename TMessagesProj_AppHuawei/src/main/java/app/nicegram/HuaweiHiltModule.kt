@@ -2,11 +2,11 @@ package app.nicegram
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.appvillis.core_data.ApiService
+import com.appvillis.core_domain.repository.user.UserBalanceRepository
+import com.appvillis.core_domain.repository.user.UserRepository
 import com.appvillis.core_markets.MarketFeatureFlagsProvider
-import com.appvillis.core_network.ApiService
 import com.appvillis.feature_nicegram_billing.domain.BillingManager
-import com.appvillis.rep_user.domain.UserBalanceRepository
-import com.appvillis.rep_user.domain.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

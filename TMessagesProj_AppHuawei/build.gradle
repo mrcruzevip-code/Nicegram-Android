@@ -29,9 +29,9 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation files('../TMessagesProj/libs/libgsaverification-client.aar')
 
-    implementation("nicegram:core:network")
+    implementation("nicegram:core:data")
     implementation("nicegram:core:markets")
-    implementation("nicegram:features:rep-user")
+    implementation("nicegram:core:domain")
     implementation("nicegram:features:nicegram-billing")
 
     implementation 'com.google.firebase:firebase-messaging:22.0.0'

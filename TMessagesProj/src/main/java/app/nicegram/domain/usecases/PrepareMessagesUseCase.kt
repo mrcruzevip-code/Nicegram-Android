@@ -7,7 +7,7 @@ import app.nicegram.groupAndLimitMessageObjects
 import app.nicegram.groupAndLimitMessages
 import app.nicegram.toMessageInformation
 import app.nicegram.toModel
-import com.appvillis.core_network.data.body.ChannelInfoRequest
+import com.appvillis.core_data.data.body.ChannelInfoRequest
 import com.appvillis.feature_nicegram_client.domain.NgClientRemoteConfigRepo
 import com.appvillis.lib_android_base.domain.OperationResult
 import org.telegram.messenger.MessageObject

@@ -97,8 +97,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.appvillis.assistant_core.MainActivity;
-import com.appvillis.core_network.data.HeaderInterceptor;
+import com.appvillis.core_data.data.HeaderInterceptor;
+import com.appvillis.core_domain.repository.user.UserRepository;
 import com.appvillis.core_resources.ui_compose.utils.ScrollViewDelegate;
+import com.appvillis.core_resources.widgets.BubbleHintWidget;
 import com.appvillis.core_resources.widgets.ToastViewHelper;
 import com.appvillis.feature_keywords.KeywordsEntryPoint;
 import com.appvillis.feature_keywords.domain.KeywordsConsts;
@@ -114,13 +116,6 @@ import com.appvillis.nicegram.NicegramAssistantHelper;
 import com.appvillis.nicegram.NicegramBillingHelper;
 import com.appvillis.nicegram.NicegramLoginHelper;
 import com.appvillis.nicegram.ReviewHelper;
-import com.appvillis.rep_user.domain.UserRepository;
-import com.appvillis.core_resources.widgets.BubbleHintWidget;
-
-import app.nicegram.AiAnalysisHelper;
-import app.nicegram.NicegramWalletHelper;
-import dagger.hilt.EntryPoints;
-import timber.log.Timber;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -206,15 +201,55 @@ import org.telegram.ui.Components.ArchiveHelp;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.ChatActivityEnterView;
+import org.telegram.ui.Components.ChatAvatarContainer;
+import org.telegram.ui.Components.CombinedDrawable;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.DialogsActivityStatusLayout;
 import org.telegram.ui.Components.DialogsActivityTopBubblesFadeView;
 import org.telegram.ui.Components.DialogsActivityTopPanelLayout;
+import org.telegram.ui.Components.DialogsItemAnimator;
+import org.telegram.ui.Components.FilterTabsView;
+import org.telegram.ui.Components.FiltersListBottomSheet;
+import org.telegram.ui.Components.FlickerLoadingView;
+import org.telegram.ui.Components.FloatingDebug.FloatingDebugController;
+import org.telegram.ui.Components.FloatingDebug.FloatingDebugProvider;
+import org.telegram.ui.Components.FolderBottomSheet;
+import org.telegram.ui.Components.FolderDrawable;
+import org.telegram.ui.Components.ForegroundColorSpanThemable;
+import org.telegram.ui.Components.Forum.ForumUtilities;
+import org.telegram.ui.Components.FragmentContextView;
 import org.telegram.ui.Components.FragmentFloatingButton;
 import org.telegram.ui.Components.FragmentSearchField;
 import org.telegram.ui.Components.ImageUpdater;
+import org.telegram.ui.Components.ItemOptions;
+import org.telegram.ui.Components.JoinGroupAlert;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MediaActivity;
+import org.telegram.ui.Components.NumberTextView;
+import org.telegram.ui.Components.PacmanAnimation;
 import org.telegram.ui.Components.PermissionRequest;
+import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
+import org.telegram.ui.Components.Premium.boosts.UserSelectorBottomSheet;
+import org.telegram.ui.Components.ProxyDrawable;
+import org.telegram.ui.Components.PullForegroundDrawable;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
+import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
+import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
+import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.SearchViewPager;
+import org.telegram.ui.Components.SharedMediaLayout;
+import org.telegram.ui.Components.SimpleThemeDescription;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Components.StickersAlert;
+import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.ui.Components.UItem;
-import org.telegram.ui.Components.blur3.Blur3HashImpl;
+import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
 import org.telegram.ui.Components.blur3.BlurredBackgroundWithFadeDrawable;
 import org.telegram.ui.Components.blur3.DownscaleScrollableNoiseSuppressor;
@@ -234,55 +269,14 @@ import org.telegram.ui.Gifts.GiftSheet;
 import org.telegram.ui.Stars.StarGiftSheet;
 import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stars.StarsIntroActivity;
-import org.telegram.ui.Stories.StealthModeAlert;
-import org.telegram.ui.bots.BotWebViewSheet;
-import org.telegram.ui.Components.Bulletin;
-import org.telegram.ui.Components.BulletinFactory;
-import org.telegram.ui.Components.ChatActivityEnterView;
-import org.telegram.ui.Components.ChatAvatarContainer;
-import org.telegram.ui.Components.CombinedDrawable;
-import org.telegram.ui.Components.CubicBezierInterpolator;
-import org.telegram.ui.Components.DialogsItemAnimator;
-import org.telegram.ui.Components.FilterTabsView;
-import org.telegram.ui.Components.FiltersListBottomSheet;
-import org.telegram.ui.Components.FlickerLoadingView;
-import org.telegram.ui.Components.FloatingDebug.FloatingDebugController;
-import org.telegram.ui.Components.FloatingDebug.FloatingDebugProvider;
-import org.telegram.ui.Components.FolderBottomSheet;
-import org.telegram.ui.Components.FolderDrawable;
-import org.telegram.ui.Components.ForegroundColorSpanThemable;
-import org.telegram.ui.Components.Forum.ForumUtilities;
-import org.telegram.ui.Components.FragmentContextView;
-import org.telegram.ui.Components.ItemOptions;
-import org.telegram.ui.Components.JoinGroupAlert;
-import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.MediaActivity;
-import org.telegram.ui.Components.NumberTextView;
-import org.telegram.ui.Components.PacmanAnimation;
-import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
-import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
-import org.telegram.ui.Components.Premium.boosts.UserSelectorBottomSheet;
-import org.telegram.ui.Components.ProxyDrawable;
-import org.telegram.ui.Components.PullForegroundDrawable;
-import org.telegram.ui.Components.RLottieDrawable;
-import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
-import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
-import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
-import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.SearchViewPager;
-import org.telegram.ui.Components.SharedMediaLayout;
-import org.telegram.ui.Components.SimpleThemeDescription;
-import org.telegram.ui.Components.SizeNotifierFrameLayout;
-import org.telegram.ui.Components.StickersAlert;
-import org.telegram.ui.Components.SwipeGestureSettingsView;
-import org.telegram.ui.Components.UndoView;
-import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.Stories.DialogStoriesCell;
+import org.telegram.ui.Stories.StealthModeAlert;
 import org.telegram.ui.Stories.StoriesController;
 import org.telegram.ui.Stories.StoriesListPlaceProvider;
 import org.telegram.ui.Stories.UserListPoller;
 import org.telegram.ui.Stories.recorder.HintView2;
 import org.telegram.ui.Stories.recorder.StoryRecorder;
+import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -292,11 +286,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import app.nicegram.AiAnalysisHelper;
 import app.nicegram.NicegramGroupCollectHelper;
+import app.nicegram.NicegramWalletHelper;
 import app.nicegram.PrefsHelper;
-
+import dagger.hilt.EntryPoints;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
+import timber.log.Timber;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, FloatingDebugProvider, FactorAnimator.Target, MainTabsActivity.TabFragmentDelegate {
     private final int ADDITIONAL_LIST_HEIGHT_DP = Build.VERSION.SDK_INT >= 31 ? 48 : 0;
@@ -344,8 +341,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private boolean canShowFilterTabsView;
     private int initialSearchType = -1;
-
-    private final int MENU_ID_NICEGRAM_WALLET = 998;
 
     private final String ACTION_MODE_SEARCH_DIALOGS_TAG = "search_dialogs_action_mode";
     private boolean rightFragmentTransitionInProgress;
@@ -717,7 +712,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private final static int add_to_folder = 109;
     private final static int remove_from_folder = 110;
 
-    private final static int hide_chat = 2000;
+    private final static int nicegram_hide_chat_id = 2000;
+    private final int nicegram_wallet_menu_id = 2001;
 
     private final static int ARCHIVE_ITEM_STATE_PINNED = 0;
     private final static int ARCHIVE_ITEM_STATE_SHOWED = 1;
@@ -3296,7 +3292,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             updateProxyButton(false, false);
         }
-        nicegramWalletItem = menu.addItem(MENU_ID_NICEGRAM_WALLET, R.drawable.ng_wallet_wallet_filled_24);
+        nicegramWalletItem = menu.addItem(nicegram_wallet_menu_id, R.drawable.ng_wallet_wallet_filled_24);
         nicegramWalletItem.setOnClickListener(v -> processNicegramWalletClick());
 
         fragmentSearchField = new FragmentSearchField(context, resourceProvider) {
@@ -3941,7 +3937,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     showSearch(true, true, true);
                     fragmentSearchFieldWatcher.toggleSearch(true);
                     //actionBar.openSearchField(true);
-                } else if (id >= 10 && id < 10 + UserConfig.MAX_ACCOUNT_COUNT) {
+                }
+                /*else if (id >= 10 && id < 10 + UserConfig.MAX_ACCOUNT_COUNT) { // nicegram region start
                     if (getParentActivity() == null) {
                         return;
                     }
@@ -3952,7 +3949,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     DialogsActivity dialogsActivity = new DialogsActivity(arguments);
                     dialogsActivity.setDelegate(oldDelegate);
                     launchActivity.presentFragment(dialogsActivity, false, true);
-                } else if (id == add_to_folder) {
+                }*/ // nicegram region end
+                else if (id == add_to_folder) {
                     FiltersListBottomSheet sheet = new FiltersListBottomSheet(DialogsActivity.this, selectedDialogs);
                     sheet.setDelegate((filter, checked) -> {
                         ArrayList<Long> alwaysShow = FiltersListBottomSheet.getDialogsCount(DialogsActivity.this, filter, selectedDialogs, true, false);
@@ -4050,7 +4048,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     hideActionMode(false);
                 } else if (id == pin || id == read || id == delete || id == clear || id == mute || id == archive || id == block || id == archive2 || id == pin2) {
                     performSelectedDialogsAction(selectedDialogs, id, true, false);
-                } else if (id == hide_chat) {
+                } else if (id == nicegram_hide_chat_id) {
                     List<Long> hiddenChats = HiddenChatsHelper.INSTANCE.getHiddenChats();
                     ArrayList<Long> chatsToHide = new ArrayList<>();
                     ArrayList<Long> chatsToStopHiding = new ArrayList<>();
@@ -5641,7 +5639,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
 
             void toggleNgLoggo(boolean show) {
-                menu.getItem(MENU_ID_NICEGRAM_WALLET).setAlpha(show ? 1.0f : 0.0f);
+                menu.getItem(nicegram_wallet_menu_id).setAlpha(show ? 1.0f : 0.0f);
             }
         };
         updateFilterTabs(true, false);
@@ -6765,7 +6763,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         readItem = otherItem.addSubItem(read, R.drawable.msg_markread, LocaleController.getString(R.string.MarkAsRead));
         clearItem = otherItem.addSubItem(clear, R.drawable.msg_clear, LocaleController.getString(R.string.ClearHistory));
         blockItem = otherItem.addSubItem(block, R.drawable.msg_block, LocaleController.getString(R.string.BlockUser));
-        hideItem = otherItem.addSubItem(hide_chat, R.drawable.msg_archive_hide, getContext().getString(R.string.NicegramHideChat));
+        hideItem = otherItem.addSubItem(nicegram_hide_chat_id, R.drawable.msg_archive_hide, getContext().getString(R.string.NicegramHideChat));
 
         muteItem.setOnLongClickListener(e -> {
             performSelectedDialogsAction(selectedDialogs, mute, true, true);
@@ -9980,9 +9978,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (hideItem != null) {
             hideItem.setVisibility(View.VISIBLE);
             if (hiddenChatsCount == count) {
-                hideItem.setText(getContext().getString(R.string.NicegramStopHideChat));
+                hideItem.setText(LocaleController.getString(R.string.NicegramStopHideChat));
             } else {
-                hideItem.setText(getContext().getString(R.string.NicegramHideChat));
+                hideItem.setText(LocaleController.getString(R.string.NicegramHideChat));
             }
         }
     }
@@ -13843,6 +13841,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final float factor3 = 1f - animatorDoneButtonVisible.getFloatValue();
         final float factor = factor1 * factor2 * factor3;
         FragmentFloatingButton.setAnimatedVisibility(optionsItem, factor);
+        FragmentFloatingButton.setAnimatedVisibility(nicegramWalletItem, factor); // nicegram wallet icon
     }
 
     private void checkUi_itemPasscodeVisibility() {

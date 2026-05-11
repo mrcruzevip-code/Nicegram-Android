@@ -24,6 +24,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
@@ -99,21 +100,20 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.FragmentActivity;
 
-import com.appvillis.core_network.data.HeaderInterceptor;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.QueryProductDetailsParams;
+import com.appvillis.core_data.data.HeaderInterceptor;
+import com.appvillis.core_domain.repository.user.UserRepository;
 import com.appvillis.core_resources.widgets.EsimBannerView;
 import com.appvillis.feature_account_export.ExportAccountsBottomSheetFragment;
 import com.appvillis.feature_account_export.domain.Account;
 import com.appvillis.feature_analytics.data.factories.NicegramTgAuthEvents;
 import com.appvillis.nicegram.AnalyticsHelper;
 import com.appvillis.nicegram.NicegramLoginHelper;
-import com.appvillis.nicegram.NicegramThemeApplyHelper;
 import com.appvillis.nicegram.presentation.NicegramTutorialSmsDialog;
-import com.appvillis.rep_user.domain.UserRepository;
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.ProductDetails;
-import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.QueryProductDetailsParams;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -2075,7 +2075,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             addView(esimBannerLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.START, 16, 14, 16, 8));
             esimBannerLayout.setOnClickListener(view -> {
                 String url = "https://esimplus.onelink.me/WxwP/wxkmptvq";
-                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                Context nullableContext = view.getContext();
+                try {
+                    if (nullableContext != null) {
+                        nullableContext.startActivity(intent);
+                    }
+                } catch (ActivityNotFoundException e) {
+                    if (nullableContext != null) {
+                        Toast.makeText(nullableContext, LocaleController.getString(R.string.Error_Default), Toast.LENGTH_SHORT).show();
+                    }
+                }
             });
 
             ImportAccountLoginView importAccountsView = new ImportAccountLoginView(context, () -> {

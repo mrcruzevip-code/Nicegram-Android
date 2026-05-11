@@ -1,5 +1,8 @@
 package com.appvillis.nicegram
 
+import com.appvillis.core_domain.repository.user.UserRepository
+import com.appvillis.core_domain.usecase.user.AppSessionControlUseCase
+import com.appvillis.core_domain.usecase.user.GetUserStatusUseCase
 import com.appvillis.core_resources.domain.TgResourceProvider
 import com.appvillis.feature_ai_chat.domain.AiChatRemoteConfigRepo
 import com.appvillis.feature_ai_chat.domain.ClearDataUseCase
@@ -30,9 +33,6 @@ import com.appvillis.nicegram_wallet.wallet_tonconnect.domain.WalletPopupActivit
 import com.appvillis.rep_placements.domain.GetChatPlacementsUseCase
 import com.appvillis.rep_placements.domain.GetPinChatsPlacementsUseCase
 import com.appvillis.rep_placements.domain.HidePlacementUseCase
-import com.appvillis.rep_user.domain.AppSessionControlUseCase
-import com.appvillis.rep_user.domain.GetUserStatusUseCase
-import com.appvillis.rep_user.domain.UserRepository
 import com.appvillis.rep_user_actions.domain.usecases.SaveUserActionUseCase
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn

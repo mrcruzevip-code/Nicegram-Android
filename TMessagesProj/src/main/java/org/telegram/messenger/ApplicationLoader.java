@@ -35,6 +35,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.appvillis.assistant_core.app.AppInit;
+import com.appvillis.core_domain.usecase.user.AppSessionControlUseCase;
+import com.appvillis.core_domain.usecase.user.GetUserStatusUseCase;
 import com.appvillis.core_resources.MarketConsts;
 import com.appvillis.core_resources.domain.TgResourceProvider;
 import com.appvillis.feature_analytics.data.AnalyticsValue;
@@ -44,8 +46,6 @@ import com.appvillis.lib_android_base.Intents;
 import com.appvillis.nicegram.AnalyticsHelper;
 import com.appvillis.nicegram.NicegramPrefs;
 import com.appvillis.nicegram.network.NicegramNetwork;
-import com.appvillis.rep_user.domain.AppSessionControlUseCase;
-import com.appvillis.rep_user.domain.GetUserStatusUseCase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.zxing.BarcodeFormat;
@@ -64,8 +64,8 @@ import org.telegram.ui.IUpdateLayout;
 import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
-import java.util.Locale;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -103,7 +103,6 @@ public class ApplicationLoader extends Application {
     private static PushListenerController.IPushListenerServiceProvider pushProvider;
     private static IMapsProvider mapsProvider;
     private static ILocationServiceProvider locationServiceProvider;
-
     @Inject
     public GetUserStatusUseCase getUserStatusUseCase;
     @Inject

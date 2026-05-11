@@ -14849,23 +14849,30 @@ public class ChatActivityEnterView extends FrameLayout implements
     }
 
     // region ng translate input message
-    private MessageObject.TranslationChangedCallback translationCallback = new MessageObject.TranslationChangedCallback() {
-        String errorText = LocaleController.getString("NicegramTranslationUnavailable", R.string.NicegramTranslationUnavailable);
+    private final MessageObject.TranslationChangedCallback translationCallback = new MessageObject.TranslationChangedCallback() {
+
+        final String errorText = LocaleController.getString(R.string.NicegramTranslationUnavailable);
+
         @Override
         public void changed(String translatedText) {
-            messageEditText.setText(translatedText);
+            if (messageEditText != null) {
+                messageEditText.setText(translatedText);
+            }
         }
 
         @Override
         public void error() {
-            Toast.makeText(parentFragment.getContext(), errorText, Toast.LENGTH_SHORT).show();
+            Context context = parentFragment.getContext();
+            if (context != null) {
+                Toast.makeText(context, errorText, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
     public void setNewNaming(){
         if (translateToButton != null) {
             String shortName = PrefsHelper.INSTANCE.getTranslateLanguageToShortName(currentAccount, parentFragment.getDialogId()).toUpperCase();
-            translateToButton.setText(LocaleController.formatString("NicegramToLanguage", R.string.NicegramToLanguage, shortName));
+            translateToButton.setText(LocaleController.formatString(R.string.NicegramToLanguage, shortName));
         }
     }
     // endregion ng translate input message

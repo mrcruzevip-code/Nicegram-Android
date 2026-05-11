@@ -3,11 +3,11 @@ package app.nicegram.bridge
 import android.content.Context
 import android.net.Uri
 import com.appvillis.assistant_core.MainActivity
+import com.appvillis.core_domain.usecase.user.GetUserStatusUseCase
 import com.appvillis.feature_analytics.domain.AnalyticsManager
 import com.appvillis.nicegram_wallet.wallet_dapps.domain.usecases.GetDAppsUseCase
 import com.appvillis.nicegram_wallet.wallet_remote_cofig.domain.GetWalletAvailabilityUseCase
 import com.appvillis.nicegram_wallet.wallet_storage.domain.GetCurrentWalletUseCase
-import com.appvillis.rep_user.domain.GetUserStatusUseCase
 import timber.log.Timber
 import javax.inject.Inject
 

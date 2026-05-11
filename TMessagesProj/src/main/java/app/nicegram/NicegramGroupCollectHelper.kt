@@ -5,7 +5,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Base64
 import app.nicegram.bridge.TgBridgeEntryPoint
-import com.appvillis.core_network.data.body.ChannelInfoRequest
+import com.appvillis.core_data.data.body.ChannelInfoRequest
 import com.appvillis.feature_nicegram_client.NicegramClientHelper
 import com.appvillis.feature_nicegram_client.domain.CollectGroupInfoUseCase
 import com.appvillis.feature_nicegram_client.domain.CollectGroupInfoUseCase.Geo

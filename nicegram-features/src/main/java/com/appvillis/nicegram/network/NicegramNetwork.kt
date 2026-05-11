@@ -1,7 +1,7 @@
 package com.appvillis.nicegram.network
 
 import android.content.Context
-import com.appvillis.core_network.di.NetworkConsts.API_URL
+import com.appvillis.core_data.di.NetworkConsts.API_URL
 import com.appvillis.nicegram.BuildConfig
 import com.appvillis.nicegram.NicegramScopes.ioScope
 import com.appvillis.nicegram.NicegramScopes.uiScope
